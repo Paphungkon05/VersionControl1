@@ -18,12 +18,12 @@
       <q-input
         filled
         type="number"
-        v-model="age"
-        label="Your age *"
+        v-model="อายุ"
+        label="อายุของคุณ *"
         lazy-rules
         :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
+          val => val !== null && val !== '' || 'กรุณาใส่อายุของคุณ',
+          val => val > 0 && val < 100 || 'กรุณาใส่อายุที่แท้จริง'
         ]"
       />
 
@@ -37,6 +37,48 @@
 
   </div>
 </template>
-<script setup>
-//
+<script>
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
+
+export default {
+  setup () {
+    const $q = useQuasar()
+
+    const name = ref(null)
+    const age = ref(null)
+    const accept = ref(false)
+
+    return {
+      name,
+      age,
+      accept,
+
+      onSubmit () {
+        if (accept.value !== true) {
+          $q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'warning',
+            message: 'You need to accept the license and terms first'
+          })
+        }
+        else {
+          $q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'Submitted'
+          })
+        }
+      },
+
+      onReset () {
+        name.value = null
+        age.value = null
+        accept.value = false
+      }
+    }
+  }
+}
 </script>
